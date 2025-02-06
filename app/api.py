@@ -4,7 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.crud import create_query, get_all_queries, get_queries_by_number
 from app.db import get_session
 from app.utils import mock_external_server
-from app.schemas import QueryCreateSchema, QueryResponseSchema
+from app.schemas import (
+    QueriesResponseSchema, QueryCreateSchema, QueryResponseSchema
+)
 
 
 api_router = APIRouter()
@@ -28,7 +30,7 @@ async def create_new_query(
     return db_query
 
 
-@api_router.get("/history", response_model=list[QueryResponseSchema])
+@api_router.get("/history", response_model=list[QueriesResponseSchema])
 async def read_history(
     session: AsyncSession = Depends(get_session),
     skip: int = 0,
@@ -38,7 +40,9 @@ async def read_history(
     return queries
 
 
-@api_router.get("/history/{number}", response_model=list[QueryResponseSchema])
+@api_router.get(
+    "/history/{number}", response_model=list[QueriesResponseSchema]
+)
 async def read_history_by_number(
     number: str, session: AsyncSession = Depends(get_session)
 ):
