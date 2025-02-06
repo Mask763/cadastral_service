@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud import create_query, get_all_queries, get_queries_by_number
 from app.db import get_session
-from app.utils import mock_external_server
+from app.utils import fetch_external_server_result
 from app.schemas import (
     QueriesResponseSchema, QueryCreateSchema, QueryResponseSchema
 )
@@ -21,7 +21,7 @@ async def ping():
 async def create_new_query(
     query: QueryCreateSchema, session: AsyncSession = Depends(get_session)
 ):
-    responce = await mock_external_server()
+    responce = await fetch_external_server_result()
 
     if responce not in [True, False]:
         raise Exception("Unexpected responce of external server")
@@ -52,5 +52,5 @@ async def read_history_by_number(
 
 @api_router.get("/result")
 async def get_response():
-    response = await mock_external_server()
+    response = await fetch_external_server_result()
     return {"result": response}
