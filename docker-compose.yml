@@ -23,7 +23,8 @@ services:
       timeout: 5s
       retries: 5
   backend:
-    build: .
+    container_name: cadastral_service
+    build: main_service/
     restart: unless-stopped
     env_file:
       - .env
@@ -34,3 +35,11 @@ services:
     command: >
       sh -c "alembic upgrade head && 
       uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+  mock_server:
+    container_name: mock_server
+    build: mock_server/
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8001:8001"
