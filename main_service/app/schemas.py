@@ -1,5 +1,17 @@
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
+
+from fastapi_users import models
+
+
+class UserRead(BaseModel):
+    id: models.ID
+    email: EmailStr
+
+
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
 
 
 class QueryCreateSchema(BaseModel):
