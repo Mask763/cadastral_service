@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from fastapi_users.db import SQLAlchemyBaseUserTable
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Float, Boolean, func
 
@@ -20,3 +21,7 @@ class Query(Base):
         server_default=func.now(),
         index=True
     )
+
+
+class User(SQLAlchemyBaseUserTable[int], Base):
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
