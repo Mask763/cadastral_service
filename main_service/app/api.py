@@ -1,12 +1,14 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth import current_active_user
 from app.crud import create_query, get_all_queries, get_queries_by_number
 from app.db import get_session
-from app.utils import fetch_external_server_result
 from app.schemas import (
     QueriesResponseSchema, QueryCreateSchema, QueryResponseSchema
 )
+from app.models import User
+from app.utils import fetch_external_server_result
 
 
 api_router = APIRouter()
@@ -19,7 +21,9 @@ async def ping():
 
 @api_router.post("/query", response_model=QueryResponseSchema)
 async def create_new_query(
-    query: QueryCreateSchema, session: AsyncSession = Depends(get_session)
+    query: QueryCreateSchema,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(current_active_user)
 ):
     responce = await fetch_external_server_result()
 
@@ -33,6 +37,7 @@ async def create_new_query(
 @api_router.get("/history", response_model=list[QueriesResponseSchema])
 async def read_history(
     session: AsyncSession = Depends(get_session),
+    user: User = Depends(current_active_user),
     skip: int = 0,
     limit: int = 10
 ):
@@ -44,13 +49,15 @@ async def read_history(
     "/history/{number}", response_model=list[QueriesResponseSchema]
 )
 async def read_history_by_number(
-    number: str, session: AsyncSession = Depends(get_session)
+    number: str,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(current_active_user)
 ):
     queries = await get_queries_by_number(session, number)
     return queries
 
 
 @api_router.get("/result")
-async def get_response():
+async def get_response(user: User = Depends(current_active_user)):
     response = await fetch_external_server_result()
     return {"result": response}

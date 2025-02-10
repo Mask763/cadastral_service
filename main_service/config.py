@@ -7,8 +7,9 @@ class Settings(BaseSettings):
     DB_NAME: str
     DB_HOST: str
     DB_PORT: str
+    JWT_SECRET: str
 
-    model_config = SettingsConfigDict(env_file='.env')
+    model_config = SettingsConfigDict(env_file='../.env')
 
     @property
     def DB_URL(self) -> str:

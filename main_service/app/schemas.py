@@ -1,6 +1,16 @@
 from datetime import datetime
 from pydantic import BaseModel
 
+from fastapi_users.schemas import BaseUser, BaseUserCreate
+
+
+class UserRead(BaseUser):
+    pass
+
+
+class UserCreate(BaseUserCreate):
+    pass
+
 
 class QueryCreateSchema(BaseModel):
     cadastral_number: str
