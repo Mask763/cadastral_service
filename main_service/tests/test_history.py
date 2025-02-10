@@ -3,6 +3,11 @@ from httpx import AsyncClient
 
 
 @pytest.mark.asyncio
+async def test_get_history_without_auth(async_client: AsyncClient):
+    response = await async_client.get("/history")
+    assert response.status_code == 401
+
+@pytest.mark.asyncio
 async def test_get_history(async_client: AsyncClient, auth_headers: dict):
     # Сначала создаем запрос
     query_data = {
