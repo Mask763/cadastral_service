@@ -17,4 +17,4 @@ app.include_router(
     prefix="/auth",
     tags=["auth"]
 )
-app.include_router(api_router)
+app.include_router(api_router, tags=["main_api"])
