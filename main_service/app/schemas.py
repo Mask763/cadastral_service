@@ -19,6 +19,7 @@ class QueryCreateSchema(BaseModel):
 
 
 class QueryResponseSchema(BaseModel):
+    cadastral_number: str
     response: bool
 
 
